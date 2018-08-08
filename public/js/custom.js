@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
 
     // confirm delete
@@ -8,5 +9,14 @@ $(document).ready(function () {
 
         var c = confirm(text);
         return c;
+    });
+});
+
+$(document).ready(function () {
+
+    // add selectize to select element
+
+    $('.js-selectize').selectize({
+        sortField: 'text'
     });
 });

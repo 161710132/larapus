@@ -9,8 +9,8 @@
 <div class="form-group {!! $errors->has('author_id') ? 'has-error' : '' !!}">
     {!! Form::label('author_id', 'Penulis', ['class'=>'col-md-2 control-label']) !!}
     <div class="col-md-4">
-        {!! Form::select('author_id', [''=>'']+App\Author::pluck('name','id')->all(), null) !!}
-        {!! $errors->first('author_id', '<p class="help-block">:message</p>') !!}
+    {!! Form::select('author_id', [''=>'']+App\Author::pluck('name','id')->all(), null, ['class'=>'js-selectize','placeholder' => 'Pilih Penulis']) !!}
+    {!! $errors->first('author_id', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
 

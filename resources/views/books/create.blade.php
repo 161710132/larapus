@@ -15,7 +15,7 @@
                     <h2 class="panel-title">Tambah Buku</h2>
 </div>
             <div class="panel-body">
-{!! Form::open(['url' => route('books.store'),
+{!! Form::open(['url' => route('books.store'),&nbsp&nbsp&nbsp&nbsp&nbsp
 'method' => 'post', 'files'=>'true', 'class'=>'form-horizontal']) !!}
 @include('books._form')
 {!! Form::close() !!}
