@@ -11,6 +11,9 @@ use File;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Http\Requests\AuthBookRequest;
+use App\BorrowLog;
+use Illuminate\Support\Facades\Auth;
+use App\Exceptions\BookException;
 
 class BooksController extends Controller
 {
@@ -19,6 +22,7 @@ class BooksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index(Request $request, Builder $htmlBuilder)
     {
             if ($request->ajax()) {
@@ -138,7 +142,8 @@ return view('books.index')->with(compact('html'));
             ]);
 
             $book = Book::find($id);
-            $book->update($request->all());
+            if(!$book->update($request->all())) 
+            return redirect()->back();
 
             if ($request->hasFile('cover')) {
                     // menambil cover yang diupload berikut ekstensinya
@@ -187,9 +192,11 @@ return view('books.index')->with(compact('html'));
     public function destroy($id)
     {
         $book = Book::find($id);
+        $cover = $book->cover;
+        if(!$book->delete()) return redirect()->back();
 
         // hapus cover lama, jika ada
-    if ($book->cover) {
+        if ($cover) {
     $old_cover = $book->cover;
     $filepath = public_path() . DIRECTORY_SEPARATOR . 'img'. DIRECTORY_SEPARATOR . $book->cover;
 
@@ -200,7 +207,7 @@ return view('books.index')->with(compact('html'));
         }
     }
 
-    $book->delete();
+    // $book->delete();
 
     Session::flash("flash_notification", [
         "level"=>"success",
@@ -208,5 +215,54 @@ return view('books.index')->with(compact('html'));
         ]);
 
         return redirect()->route('books.index');
+    }
+
+    public function borrow($id)
+    {
+        try {
+            $book = Book::findOrFail($id);
+            Auth::user()->borrow($book);
+    
+
+        Session::flash("flash_notification", [
+            "level"=>"success",
+            "message"=>"Berhasil meminjam $book->title"
+            ]);
+
+        } catch (BookException $e) {
+            Session::flash("flash_notification", [
+                "level"   => "primary",
+                "message" => $e->getMessage()
+                ]);
+
+        } catch (ModelNotFoundException $e) {
+            Session::flash("flash_notification", [
+                "level"=>"danger",
+                "message"=>"Buku tidak ditemukan."
+                ]);
+        }
+
+        return redirect('/');
+
+        }
+
+        public function returnBack($book_id)
+        {
+            $borrowLog = BorrowLog::where('user_id', Auth::user()->id)
+                        ->where('book_id', $book_id)
+                        ->where('is_returned', 0)
+                        ->first();
+
+            if ($borrowLog) {
+                $borrowLog->is_returned = true;
+                $borrowLog->save();
+
+                Session::flash("flash_notification", [
+                    "level"
+                    => "success",
+                    "message" => "Berhasil mengembalikan " . $borrowLog->book->title
+                    ]);
+        }
+            return redirect('/home');
     }
 }
