@@ -7,7 +7,7 @@
             <nav aria-label="breadcrumb primary">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item active" aria-current="page"><a href="{{ url('/home') }}">Home</a> </li>
-                    <li class="breadcrumb-item active" aria-current="page">Penulis</li>
+                    <li class="breadcrumb-item active" aria-current="page">Buku</li>
                 </ol>
             </nav>
             <div class="card">

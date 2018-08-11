@@ -54,18 +54,27 @@
                               <li class="nav-item {{ Request::is('admin/books') ? 'active ' : '' }}">
                                 <a class="nav-link" href="{{ route('books.index') }}">Buku</a>
                             </li>
-                           {{-- <li class="nav-item {{ Request::is('admin/members') ? 'active ' : '' }}">
+                            <li class="nav-item {{ Request::is('admin/members') ? 'active ' : '' }}">
                                 <a class="nav-link" href="{{ route('members.index') }}">Member</a>
                             </li>
-                            <li class="nav-item {{ Request::is('admin/statistics') ? 'active ' : '' }}">
+                            {{--<li class="nav-item {{ Request::is('admin/statistics') ? 'active ' : '' }}">
                                 <a class="nav-link" href="{{ route('statistics.index') }}">Statistik</a>
                             </li>  --}}
                             @endrole
+
+                           
+
                             @if (auth()->check())
-                                {{--  <li class="nav-item {{ Request::is('settings/profile') ? 'active ' : '' }}">
+                                  <li class="nav-item {{ Request::is('settings/profile') ? 'active ' : '' }}">
                                     <a class="nav-link" href="{{ url('/settings/profile') }}">Profil</a>
-                                </li>  --}}
+                                </li>  
                             @endif
+
+                            <li class="nav-item {{ Request::is('settings/password') ? 'active ' : '' }}">
+                                    <a class="nav-link" href="{{ url('/settings/password') }}">Ubah Password</a>
+                                </li>
+                            
+                            
                         @endif
                     </ul>
 
@@ -110,6 +119,7 @@
         </main>
     </div>
     {{--  JS  --}}
+    <script src='https://www.google.com/recaptcha/api.js'></script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>

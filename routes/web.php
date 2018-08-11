@@ -26,6 +26,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix'=>'admin', 'middleware'=>['auth']], function () {
     Route::resource('authors', 'AuthorsController');
     Route::resource('books', 'BooksController');
+    Route::resource('members', 'MembersController');
 });
 
 Route::get('books/{book}/borrow',['middleware' => ['auth', 'role:member'],
@@ -35,3 +36,18 @@ Route::get('books/{book}/borrow',['middleware' => ['auth', 'role:member'],
 Route::put('books/{book}/return', ['middleware' => ['auth', 'role:member'],
            'as'  => 'member.books.return','uses'=> 'BooksController@returnBack'
 ]);
+
+Route::get('auth/verify/{token}', 'Auth\RegisterController@verify');
+
+Route::get('auth/send-verification', 'Auth\RegisterController@sendVerification');
+
+
+Route::get('settings/profile', 'SettingsController@profile');
+
+//route edit email
+Route::get('settings/profile/edit', 'SettingsController@editProfile');
+Route::post('settings/profile', 'SettingsController@updateProfile');
+
+//route edit password
+Route::get('settings/password', 'SettingsController@editPassword');
+Route::post('settings/password', 'SettingsController@updatePassword');
